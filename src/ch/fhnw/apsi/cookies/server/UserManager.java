@@ -6,5 +6,4 @@ public class UserManager {
 	public User createUser(String name, String email) {
 		return null;
 	}
-	
 }

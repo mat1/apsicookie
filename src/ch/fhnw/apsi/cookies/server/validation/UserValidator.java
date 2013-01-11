@@ -22,7 +22,7 @@ public class UserValidator {
 		return false;
 	}
 	
-	public UserValidator createDefaultUserValidator(UserManager mgr) {
+	public static UserValidator createDefaultUserValidator(UserManager mgr) {
 		return new UserValidator(mgr);
 	}
 	
