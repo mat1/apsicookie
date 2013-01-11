@@ -7,10 +7,11 @@ public class ClientSession {
 	private long expiringTime;
 	private byte[] currentKey;
 	
-	private ClientSession(User owner, String token, long expiringTime) {
+	private ClientSession(User owner, String token, long expiringTime, byte[] key) {
 		this.owner = owner;
 		this.token = token;
 		this.expiringTime = expiringTime;
+		this.currentKey = key;
 	}
 
 	public User getOwner() {
@@ -69,7 +70,7 @@ public class ClientSession {
 		return true;
 	}
 	
-	public static ClientSession createSessionFromRequest(User owner, String starttoken, long expiringTime) {
-		return new ClientSession(owner, starttoken, expiringTime);
+	public static ClientSession createSession(User owner, String starttoken, long expiringTime, byte[] key) {
+		return new ClientSession(owner, starttoken, expiringTime, key);
 	}
 }

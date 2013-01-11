@@ -19,7 +19,7 @@ public class SessionManager {
 	
 	public String createSession(User user) {
 		final String token = generateToken();
-		final ClientSession sess = ClientSession.createSessionFromRequest(user, token, getNextExpiringTimeFromNow());
+		final ClientSession sess = ClientSession.createSession(user, token, getNextExpiringTimeFromNow(), cookieManager.generateKey(SERVER_KEY_SIZE));
 		sessions.put(token, sess);
 		
 		return token;
