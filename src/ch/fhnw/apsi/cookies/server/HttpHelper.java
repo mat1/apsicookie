@@ -31,10 +31,11 @@ public class HttpHelper {
 		try {
 			String cookie = mgr.getSessionCookie(token, data);
 			if(cookie != null) {
-				System.out.println("Writing null cookie.");
 				Headers headerResponse = exchange.getResponseHeaders();
 				headerResponse.set("Set-Cookie", "token="+cookie+";" +
 												 "Max-Age=60; Version=\"1\"");
+			} else {
+				System.out.println("Writing null cookie.");
 			}
 			exchange.sendResponseHeaders(200, message.length());
 			
@@ -46,7 +47,15 @@ public class HttpHelper {
 		}
 	}
 	
-	public static String getToken(HttpExchange exchange) {
+	public static String getTokenFromCookie(String cookie) {
+		final String[] splitted = cookie.split("-");
+		if(splitted.length >= 1) {
+			return splitted[0];
+		}
+		return "";
+	}
+	
+	public static String getTokenCookie(HttpExchange exchange) {
 		return getTokenCookieValue(exchange.getRequestHeaders());
 	}
 	

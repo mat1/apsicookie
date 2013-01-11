@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.validation.HeaderInfoHasher;
 import ch.fhnw.apsi.cookies.server.validation.RequestValidator;
-import ch.fhnw.apsi.cookies.server.validation.UserValidator;
 
 import com.sun.net.httpserver.HttpServer;
 
@@ -26,7 +25,7 @@ public class Server {
 		try {
 			HttpServer server = HttpServer.create(new InetSocketAddress(port), maxQueue);
 			server.createContext("/", new WelcomeHandler());
-			server.createContext("/register", RegistrationHandler.createRegistrationHandler(sessManager, UserValidator.createDefaultUserValidator(userManager)));
+			server.createContext("/register", RegistrationHandler.createRegistrationHandler(sessManager, userManager));
 			server.createContext("/secured", SecureContentHandler.createSecureContentHandler(RequestValidator.createRequestValidator(sessManager, new HeaderInfoHasher())));
 			server.setExecutor(null); // creates a default executor
 			server.start();

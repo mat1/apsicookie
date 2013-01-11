@@ -32,12 +32,14 @@ public class UserValidator {
 	 * @return whether the check was succesful or not
 	 */
 	public boolean isValid(User u) {
+		
+		
 		if(!emailFormatValid(u.getMail()))
 			throw new InvalidEmailException("Invalid email format");
 		
 		if(!mxRecordExists(u.getMail()))
 			throw new InvalidEmailException("Invalid domain provided");
-		
+				
 		if(userExists(u.getUserName()))
 			throw new UserAlreadyExistingException(u.getUserName());
 		

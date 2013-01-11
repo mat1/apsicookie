@@ -20,7 +20,9 @@ public class SecureContentHandler implements HttpHandler {
 	@Override
 	public void handle(HttpExchange exch) throws IOException {
 		if(validator.isValid(exch.getLocalAddress().getAddress(), exch.getRequestHeaders())) {
-			HttpHelper.writeResponse(validator.getSessionManager().getCookieData(HttpHelper.getToken(exch)), THE_ANSWER, exch, validator.getSessionManager());
+			final String requestToken = HttpHelper.getTokenFromCookie(HttpHelper.getTokenCookie(exch));
+			final String token = validator.getSessionManager().updateSession(requestToken);
+			HttpHelper.writeResponse(token, THE_ANSWER, exch, validator.getSessionManager());
 		} else {
 			HttpHelper.writeError(500, ERROR, exch);
 		}

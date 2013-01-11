@@ -8,7 +8,6 @@ import org.junit.Test;
 import ch.fhnw.apsi.cookies.server.UserManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 import ch.fhnw.apsi.cookies.server.validation.UserValidator.InvalidEmailException;
-import ch.fhnw.apsi.cookies.server.validation.UserValidator.UserAlreadyExistingException;
 
 public class UserValidatorTest {
 
@@ -23,12 +22,6 @@ public class UserValidatorTest {
 	public void testSuccess() {
 		assertTrue(underTest.isValid(User.createUser("florian", "florian.luescher@students.fhnw.ch")));
 		assertTrue(underTest.isValid(User.createUser("matthias", "matthias.brun@students.fhnw.ch")));
-	}
-	
-	@Test(expected=UserAlreadyExistingException.class)
-	public void testUserAlreadyExists() {
-		assertTrue(underTest.isValid(User.createUser("florian", "florian.luescher@students.fhnw.ch")));
-		underTest.isValid(User.createUser("florian", "florian.luescher@students.fhnw.ch"));
 	}
 	
 	@Test(expected=InvalidEmailException.class)

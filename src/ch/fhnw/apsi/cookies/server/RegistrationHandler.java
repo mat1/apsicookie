@@ -6,11 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URLDecoder;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.model.User;
-import ch.fhnw.apsi.cookies.server.validation.UserValidator;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -21,17 +19,16 @@ public class RegistrationHandler implements HttpHandler {
 	private final String content;
 	
 	private final SessionManager sessionManager;
-	private final UserValidator userValidator;
+	private final UserManager userManager;
 	
-	private RegistrationHandler(SessionManager sessionMgr, UserValidator userValidator) throws FileNotFoundException {
-		this.userValidator = userValidator;
+	private RegistrationHandler(SessionManager sessionMgr, UserManager userManager) throws FileNotFoundException {
+		this.userManager = userManager;
 		this.sessionManager = sessionMgr;
 		this.content = FileHelper.fileToString(new File(SUCCESS_HTML));
 	}
 	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-//		Headers headerRequest = exchange.getRequestHeaders();
 		InputStream is = exchange.getRequestBody();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line = reader.readLine();
@@ -42,8 +39,7 @@ public class RegistrationHandler implements HttpHandler {
 		String mail = keyValueToValue(values[1]);
 		
 		try {
-			User u = User.createUser(username, URLDecoder.decode(mail, "UTF-8"));
-			userValidator.isValid(u);
+			User u = userManager.createUser(username, mail);
 		
 			String token = sessionManager.createSession(u);
 			HttpHelper.writeResponse(token, content, exchange, sessionManager);
@@ -57,8 +53,8 @@ public class RegistrationHandler implements HttpHandler {
 		return pair[1];
 	}
 	
-	public static RegistrationHandler createRegistrationHandler(SessionManager sessionMgr, UserValidator userValidator) throws FileNotFoundException {
-		return new RegistrationHandler(sessionMgr, userValidator);
+	public static RegistrationHandler createRegistrationHandler(SessionManager sessionMgr, UserManager userManager) throws FileNotFoundException {
+		return new RegistrationHandler(sessionMgr, userManager);
 	}
 
 }
