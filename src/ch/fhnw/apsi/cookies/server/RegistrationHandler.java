@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.model.User;
@@ -35,11 +36,12 @@ public class RegistrationHandler implements HttpHandler {
 		
 		/* Read username and mail */
 		String[] values = line.split("&");
+		if(values.length != 2) HttpHelper.writeError(500, "Please enter your information", exchange);
 		String username = keyValueToValue(values[0]);
 		String mail = keyValueToValue(values[1]);
 		
 		try {
-			User u = userManager.createUser(username, mail);
+			User u = userManager.createUser(username, URLDecoder.decode(mail, "UTF-8"));
 		
 			String token = sessionManager.createSession(u);
 			HttpHelper.writeResponse(token, content, exchange, sessionManager);
@@ -50,6 +52,7 @@ public class RegistrationHandler implements HttpHandler {
 	
 	private String keyValueToValue(String keyValue){
 		String[] pair = keyValue.split("=");
+		if(pair.length != 2) return "";
 		return pair[1];
 	}
 	

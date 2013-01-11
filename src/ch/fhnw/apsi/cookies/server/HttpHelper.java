@@ -15,6 +15,9 @@ public class HttpHelper {
 	
 	public static void writeError(int status, String message, HttpExchange exchange) {
 		try {
+			Headers headerResponse = exchange.getResponseHeaders();
+			headerResponse.set("Set-Cookie", "token=nothing;" +
+											 "Max-Age=0; Version=\"1\"");
 			exchange.sendResponseHeaders(status, message.length());
 			
 			OutputStream os = exchange.getResponseBody();
@@ -34,9 +37,7 @@ public class HttpHelper {
 				Headers headerResponse = exchange.getResponseHeaders();
 				headerResponse.set("Set-Cookie", "token="+cookie+";" +
 												 "Max-Age=60; Version=\"1\"");
-			} else {
-				System.out.println("Writing null cookie.");
-			}
+			} 
 			exchange.sendResponseHeaders(200, message.length());
 			
 			OutputStream os = exchange.getResponseBody();

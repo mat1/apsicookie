@@ -39,9 +39,12 @@ public class UserValidator {
 		
 		if(!mxRecordExists(u.getMail()))
 			throw new InvalidEmailException("Invalid domain provided");
-				
+		
+		if(u.getUserName() == null || u.getUserName().length() < 3)
+			throw new InvalidUserNameException(u.getUserName(), "Username should have at least 3 characters.");
+		
 		if(userExists(u.getUserName()))
-			throw new UserAlreadyExistingException(u.getUserName());
+			throw new InvalidUserNameException(u.getUserName(), "User already exists.");
 		
 		return true;
 	}
@@ -104,11 +107,11 @@ public class UserValidator {
 		}
 	}
 	
-	public static class UserAlreadyExistingException extends RuntimeException {
+	public static class InvalidUserNameException extends RuntimeException {
 		private static final long serialVersionUID = -740513506940968591L;
 
-		public UserAlreadyExistingException(String name) {
-			super("User with name " + name + " already exists.");
+		public InvalidUserNameException(String name, String msg) {
+			super("Invalid username: " + name + ". " + msg);
 		}
 	}
 }
