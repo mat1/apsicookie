@@ -31,17 +31,17 @@ public class CookieManager {
 		
 		StringBuilder builder = new StringBuilder();
 		builder.append(token);
-		builder.append(';');
+		builder.append('-');
 		builder.append(String.valueOf(expiretime));
-		builder.append(';');
+		builder.append('-');
 		builder.append(encrypt(k, data));
-		builder.append(';');
+		builder.append('-');
 		builder.append(Base64.encodeBytes(hmacEncode(k, token+String.valueOf(expiretime)+data)));
 		return builder.toString();
 	}
 	 
 	public String extractToken(String cookie) {
-		String[] parts = cookie.split(";");
+		String[] parts = cookie.split("-");
 		if(parts.length >= 1) {
 			return parts[0];
 		}
@@ -52,7 +52,7 @@ public class CookieManager {
 	public String getCookieData(byte[] sk, String cookie) {
 		if(!isValid(sk, cookie)) return null;
 		
-		String[] parts = cookie.split(";");
+		String[] parts = cookie.split("-");
 		String token = parts[0];
 		long time = Long.parseLong(parts[1]);
 		String encrypted = parts[2];
@@ -62,7 +62,7 @@ public class CookieManager {
 	}
 	
 	public boolean isValid(byte[] sk, String cookie) {
-		String[] parts = cookie.split(";");
+		String[] parts = cookie.split("-");
 		if(parts.length != COOKIE_PARTS)
 			return false;
 		

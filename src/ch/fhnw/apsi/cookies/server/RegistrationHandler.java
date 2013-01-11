@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.model.User;
@@ -42,22 +43,29 @@ public class RegistrationHandler implements HttpHandler {
 		String username = keyValueToValue(values[0]);
 		String mail = keyValueToValue(values[1]);
 		
-		System.out.println(username);
-		System.out.println(mail);
+		try {
+			User u = User.createUser(username, URLDecoder.decode(mail, "UTF-8"));
+			userValidator.isValid(u);
 		
-		String token = sessionManager.createSession(User.createUser(username, mail));
-		String cookie = sessionManager.getSessionCookie(token, "HEADERINFO");
-		
-		Headers headerResponse = exchange.getResponseHeaders();
-		headerResponse.set("Set-Cookie", "letzteSuche=\""+cookie+"\";" +
-										 "expires=Tue, 29-Mar-2005 19:30:42 GMT; " +
-										 "Max-Age=2592000; Version=\"1\"");
-		
-		exchange.sendResponseHeaders(200, content.length());
-		
-		OutputStream os = exchange.getResponseBody();
-		os.write(content.getBytes());
-		os.close();
+			String token = sessionManager.createSession(u);
+			String cookie = sessionManager.getSessionCookie(token, "HEADERINFO");
+			
+			Headers headerResponse = exchange.getResponseHeaders();
+			headerResponse.set("Set-Cookie", "token="+cookie+";" +
+											 "Max-Age=60; Version=\"1\"");
+			
+			exchange.sendResponseHeaders(200, content.length());
+			
+			OutputStream os = exchange.getResponseBody();
+			os.write(content.getBytes());
+			os.close();
+		} catch (Exception ex) {
+			exchange.sendResponseHeaders(500, ex.getMessage().length());
+			
+			OutputStream os = exchange.getResponseBody();
+			os.write(ex.getMessage().getBytes());
+			os.close();
+		} 
 	}
 	
 	private String keyValueToValue(String keyValue){
