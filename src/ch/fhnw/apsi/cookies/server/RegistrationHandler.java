@@ -6,14 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.URLDecoder;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 import ch.fhnw.apsi.cookies.server.validation.UserValidator;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -48,23 +46,9 @@ public class RegistrationHandler implements HttpHandler {
 			userValidator.isValid(u);
 		
 			String token = sessionManager.createSession(u);
-			String cookie = sessionManager.getSessionCookie(token, "HEADERINFO");
-			
-			Headers headerResponse = exchange.getResponseHeaders();
-			headerResponse.set("Set-Cookie", "token="+cookie+";" +
-											 "Max-Age=60; Version=\"1\"");
-			
-			exchange.sendResponseHeaders(200, content.length());
-			
-			OutputStream os = exchange.getResponseBody();
-			os.write(content.getBytes());
-			os.close();
+			HttpHelper.writeResponse(token, content, exchange, sessionManager);
 		} catch (Exception ex) {
-			exchange.sendResponseHeaders(500, ex.getMessage().length());
-			
-			OutputStream os = exchange.getResponseBody();
-			os.write(ex.getMessage().getBytes());
-			os.close();
+			HttpHelper.writeError(500, ex.getMessage(), exchange);
 		} 
 	}
 	
