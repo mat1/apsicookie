@@ -1,5 +1,7 @@
 package ch.fhnw.apsi.cookies.server.validation;
 
+import java.net.InetAddress;
+
 import ch.fhnw.apsi.cookies.server.HttpHelper;
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 
@@ -15,12 +17,18 @@ public class RequestValidator {
 		hasher.getClass();
 	}
 	
-	public boolean isValid(Headers headers) {
-		String cookie = HttpHelper.getTokenCookieValue(headers);
+	public boolean isValid(InetAddress address, Headers headers) {
+		final String cookie = HttpHelper.getTokenCookieValue(headers);
 		
 		if(!mgr.isValid(cookie)) return false;
-		System.out.println("COOKIE-DATA: " + mgr.getCookieData(cookie));
-		return true;
+		
+		final String expected = mgr.getCookieData(cookie);
+		final String actual = hasher.generateHeaderInfoHash(address, headers);
+		
+		System.out.println("COOKIE-DATA: " + expected);
+		System.out.println("ACTUAL-REQU: " + actual);
+		
+		return expected.equals(actual);
 	}
 	
 	public SessionManager getSessionManager() {

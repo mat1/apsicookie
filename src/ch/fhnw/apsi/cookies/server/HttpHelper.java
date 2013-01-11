@@ -5,11 +5,14 @@ import java.io.OutputStream;
 import java.util.List;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
+import ch.fhnw.apsi.cookies.server.validation.HeaderInfoHasher;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 public class HttpHelper {
+	private static final HeaderInfoHasher hasher = new HeaderInfoHasher();
+	
 	public static void writeError(int status, String message, HttpExchange exchange) {
 		try {
 			exchange.sendResponseHeaders(status, message.length());
@@ -23,8 +26,10 @@ public class HttpHelper {
 	}
 	
 	public static void writeResponse(String token, String message, HttpExchange exchange, SessionManager mgr) { 
+		final String data = hasher.generateHeaderInfoHash(exchange.getRemoteAddress().getAddress(), exchange.getRequestHeaders());
+		
 		try {
-			String cookie = mgr.getSessionCookie(token, "HEADERINFO");
+			String cookie = mgr.getSessionCookie(token, data);
 			if(cookie != null) {
 				System.out.println("Writing null cookie.");
 				Headers headerResponse = exchange.getResponseHeaders();

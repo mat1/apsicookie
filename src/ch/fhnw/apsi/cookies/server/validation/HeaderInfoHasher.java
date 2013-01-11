@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import ch.fhnw.apsi.cookies.server.cookies.Base64;
+
 import com.sun.net.httpserver.Headers;
 
 public class HeaderInfoHasher {
@@ -15,9 +17,15 @@ public class HeaderInfoHasher {
 	static {
 		ignored.add("host");
 		ignored.add("cookie");
+		ignored.add("cache-control");
+		ignored.add("content-length");
+		ignored.add("content-type");
+		ignored.add("origin");
+		ignored.add("connection");
+		ignored.add("referer");
 	}
 	
-	public byte[] generateHeaderInfoHash(InetAddress addr, Headers headers) {
+	public String generateHeaderInfoHash(InetAddress addr, Headers headers) {
 		byte[] address = addr.getAddress();
 		byte[] heads = concatenateHeader(headers).getBytes();
 		byte[] toEncode = new byte[address.length+heads.length];
@@ -30,7 +38,7 @@ public class HeaderInfoHasher {
 			toEncode[i++] = b;
 		}
 		
-		return toHash(toEncode);
+		return Base64.encodeBytes(toHash(toEncode));
 	}
 	
 	private byte[] toHash(byte[] from) {
