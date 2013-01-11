@@ -73,7 +73,7 @@ public class UserValidator {
 			String[] split = mail.split("@");
 			if(split.length != 2) return false;
 			
-			Hashtable env = new Hashtable();
+			Hashtable<String,String> env = new Hashtable<>();
 		    env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
 		    DirContext ictx = new InitialDirContext( env );
 		    Attributes attrs = ictx.getAttributes(split[1], new String[] { "MX" });
