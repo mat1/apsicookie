@@ -6,4 +6,8 @@ public class UserManager {
 	public User createUser(String name, String email) {
 		return null;
 	}
+	
+	public User getUser(String name) {
+		return null;
+	}
 }
