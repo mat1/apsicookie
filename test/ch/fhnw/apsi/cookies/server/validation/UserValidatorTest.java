@@ -51,4 +51,9 @@ public class UserValidatorTest {
 		underTest.isValid(User.createUser("florian", "@.blobb"));
 	}
 	
+	@Test(expected=InvalidEmailException.class)
+	public void testInvalidMailFormat4() {
+		underTest.isValid(User.createUser("florian", "@a."));
+	}
+	
 }

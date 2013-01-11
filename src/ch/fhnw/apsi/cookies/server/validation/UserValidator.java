@@ -1,6 +1,7 @@
 package ch.fhnw.apsi.cookies.server.validation;
 
 import java.util.Hashtable;
+import java.util.regex.Pattern;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -12,6 +13,10 @@ import ch.fhnw.apsi.cookies.server.UserManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 
 public class UserValidator {
+	private final Pattern first = Pattern.compile("^[^@]{1,64}@[^@]{1,255}$");
+	private final Pattern second = Pattern.compile("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&\'*+/=?^_`{|}~\\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$");
+	private final Pattern third = Pattern.compile("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$");
+	
 	private final UserManager mgr;
 	
 	private UserValidator(UserManager mgr) { 
@@ -46,6 +51,20 @@ public class UserValidator {
 	 * @return true if the email format is valid
 	 */
 	private boolean emailFormatValid(String mail) {
+		if(!first.matcher(mail).matches()) return false;
+		
+		String[] parts = mail.split("@");
+		String[] locals = parts[0].split(".");
+		
+		for(String l : locals) {
+			if(!second.matcher(l).matches()) return false;
+		}
+		
+		String[] domains = parts[1].split(".");
+		for(String domain: domains) {
+			if(!third.matcher(domain).matches()) return false;
+		}
+		
 		return true;
 	}
 	
