@@ -22,7 +22,7 @@ public class Server {
 		sessManager = new SessionManager();
 	}
 	
-	public void serv() {
+	public void serve() {
 		try {
 			HttpServer server = HttpServer.create(new InetSocketAddress(port), maxQueue);
 			server.createContext("/", new WelcomeHandler());
@@ -35,4 +35,7 @@ public class Server {
 		}
 	}
 	
+	public static void main(String args[]) {
+		new Server().serve();
+	}
 }

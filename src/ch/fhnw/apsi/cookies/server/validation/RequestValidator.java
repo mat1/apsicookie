@@ -2,6 +2,8 @@ package ch.fhnw.apsi.cookies.server.validation;
 
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 
+import com.sun.net.httpserver.Headers;
+
 public class RequestValidator {
 	private final HeaderInfoHasher hasher;
 	private final SessionManager mgr;
@@ -11,7 +13,7 @@ public class RequestValidator {
 		this.hasher = hsh;
 	}
 	
-	public boolean isValid(/* http header */) {
+	public boolean isValid(Headers headers) {
 		return true;
 	}
 	
