@@ -2,15 +2,13 @@ package ch.fhnw.apsi.cookies.server.model;
 
 public class ClientSession {
 	private final User owner;
-	private final String token;
-	private final byte[] headerInfoHash;
-	private final long timestamp;
+
+	private String token;
+	private char[] currentKey;
 	
-	private ClientSession(User owner, String token,  byte[] headerInfoHash) {
+	private ClientSession(User owner, String token) {
 		this.owner = owner;
 		this.token = token;
-		this.headerInfoHash = headerInfoHash;
-		this.timestamp = System.currentTimeMillis();
 	}
 
 	public User getOwner() {
@@ -21,14 +19,6 @@ public class ClientSession {
 		return token;
 	}
 
-	public byte[] getHeaderInfoHash() {
-		return headerInfoHash;
-	}
-
-	public long getCreationTime() {
-		return timestamp;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -53,7 +43,7 @@ public class ClientSession {
 		return true;
 	}
 	
-	public ClientSession createSessionFromRequest(User owner, byte[] headerInfoHash) {
-		return new ClientSession(owner, "", headerInfoHash);
+	public ClientSession createSessionFromRequest(User ownerh) {
+		return new ClientSession(owner, "");
 	}
 }
