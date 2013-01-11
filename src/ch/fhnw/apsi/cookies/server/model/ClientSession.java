@@ -4,11 +4,13 @@ public class ClientSession {
 	private final User owner;
 
 	private String token;
-	private char[] currentKey;
+	private long expiringTime;
+	private byte[] currentKey;
 	
-	private ClientSession(User owner, String token) {
+	private ClientSession(User owner, String token, long expiringTime) {
 		this.owner = owner;
 		this.token = token;
+		this.expiringTime = expiringTime;
 	}
 
 	public User getOwner() {
@@ -17,6 +19,30 @@ public class ClientSession {
 
 	public String getToken() {
 		return token;
+	}
+	
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public long getExpiringTime() {
+		return expiringTime;
+	}
+	
+	public void setExpiringTime(long n) {
+		expiringTime = n;
+	}
+	
+	public byte[] getCurrentKey() {
+		return currentKey;
+	}
+	
+	public void setCurrentKey(byte[] k) {
+		currentKey = k;
+	}
+	
+	public void updateToken(String newToken) {
+		token = newToken;
 	}
 
 	@Override
@@ -43,7 +69,7 @@ public class ClientSession {
 		return true;
 	}
 	
-	public ClientSession createSessionFromRequest(User ownerh) {
-		return new ClientSession(owner, "");
+	public static ClientSession createSessionFromRequest(User owner, String starttoken, long expiringTime) {
+		return new ClientSession(owner, starttoken, expiringTime);
 	}
 }

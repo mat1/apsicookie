@@ -157,4 +157,8 @@ public class CookieManager {
 			throw new RuntimeException(ex);
 		}
 	}
+
+	public static CookieManager create() {
+		return new CookieManager();
+	}
 }

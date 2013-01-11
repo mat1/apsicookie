@@ -32,7 +32,7 @@ public class RegistrationHandler implements HttpHandler {
 	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		Headers headerRequest = exchange.getRequestHeaders();
+//		Headers headerRequest = exchange.getRequestHeaders();
 		InputStream is = exchange.getRequestBody();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line = reader.readLine();
@@ -46,9 +46,10 @@ public class RegistrationHandler implements HttpHandler {
 		System.out.println(mail);
 		
 		String token = sessionManager.createSession(User.createUser(username, mail));
+		String cookie = sessionManager.getSessionCookie(token, "HEADERINFO");
 		
 		Headers headerResponse = exchange.getResponseHeaders();
-		headerResponse.set("Set-Cookie", "letzteSuche=\"cookie aufbau\";" +
+		headerResponse.set("Set-Cookie", "letzteSuche=\""+cookie+"\";" +
 										 "expires=Tue, 29-Mar-2005 19:30:42 GMT; " +
 										 "Max-Age=2592000; Version=\"1\"");
 		

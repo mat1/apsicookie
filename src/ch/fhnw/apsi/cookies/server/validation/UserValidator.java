@@ -95,12 +95,16 @@ public class UserValidator {
 	}
 	
 	public static class InvalidEmailException extends RuntimeException {
+		private static final long serialVersionUID = 9166077884096634612L;
+
 		public InvalidEmailException(String msg) {
 			super("Invalid email address provided: " + msg);
 		}
 	}
 	
 	public static class UserAlreadyExistingException extends RuntimeException {
+		private static final long serialVersionUID = -740513506940968591L;
+
 		public UserAlreadyExistingException(String name) {
 			super("User with name " + name + " already exists.");
 		}
