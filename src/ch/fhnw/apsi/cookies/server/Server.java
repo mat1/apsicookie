@@ -12,7 +12,7 @@ import com.sun.net.httpserver.HttpServer;
 
 public class Server {
 	private static final int maxQueue = 0; /* use system default */
-	private final int port = 8080;
+	private final int port = 8000;
 	
 	private final UserManager userManager;
 	private final SessionManager sessManager;
