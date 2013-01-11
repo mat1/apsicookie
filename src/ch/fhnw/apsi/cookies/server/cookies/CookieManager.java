@@ -39,6 +39,15 @@ public class CookieManager {
 		builder.append(Base64.encodeBytes(hmacEncode(k, token+String.valueOf(expiretime)+data)));
 		return builder.toString();
 	}
+	 
+	public String extractToken(String cookie) {
+		String[] parts = cookie.split(";");
+		if(parts.length >= 1) {
+			return parts[0];
+		}
+		
+		return "";
+	}
 	
 	public String getCookieData(byte[] sk, String cookie) {
 		if(!isValid(sk, cookie)) return null;
