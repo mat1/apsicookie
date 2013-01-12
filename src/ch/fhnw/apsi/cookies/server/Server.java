@@ -27,12 +27,14 @@ public final class Server {
 	
 	public void serve() {
 		try {
+			logger.info("Start http server...");
 			HttpServer server = HttpServer.create(new InetSocketAddress(PORT), MAX_QUEUE);
 			server.createContext("/", WelcomeHandler.create());
 			server.createContext("/register", RegistrationHandler.create(sessionManager, userManager));
 			server.createContext("/secured", SecureContentHandler.create(RequestValidator.create(sessionManager, HeaderInfoHasher.create())));
 			server.setExecutor(null); // creates a default executor
 			server.start();
+			logger.info("Http server successfully started.");
 		} catch (IOException ex) {
 			logger.fatal("Error starting server.", ex);
 			throw new RuntimeException(ex);

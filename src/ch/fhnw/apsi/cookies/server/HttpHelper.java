@@ -6,6 +6,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.validation.HeaderInfoHasher;
 
@@ -13,6 +16,9 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 public final class HttpHelper {
+	
+	private static final Logger logger = LogManager.getLogger(HttpHelper.class.getName());
+	
 	private static final HeaderInfoHasher hasher = HeaderInfoHasher.create();
 	
 	private HttpHelper() {}
@@ -28,6 +34,7 @@ public final class HttpHelper {
 			os.write(message.getBytes());
 			os.close();
 		} catch (IOException ex) {
+			logger.error(ex);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -48,6 +55,7 @@ public final class HttpHelper {
 			os.write(message.getBytes());
 			os.close();
 		} catch (IOException ex) {
+			logger.error(ex);
 			throw new RuntimeException(ex);
 		}
 	}

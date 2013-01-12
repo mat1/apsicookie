@@ -10,6 +10,9 @@ import java.net.URLDecoder;
 
 import javax.annotation.Nonnull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 
@@ -17,7 +20,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public final class RegistrationHandler implements HttpHandler {
-
+	
+	private static final Logger logger = LogManager.getLogger(RegistrationHandler.class.getName());
+	
 	private static final String SUCCESS_HTML = "res/success.html";
 	private final String content;
 
@@ -33,6 +38,8 @@ public final class RegistrationHandler implements HttpHandler {
 
 	@Override
 	public void handle(@Nonnull HttpExchange exchange) throws IOException {
+		logger.info("Handle registraion request.");
+		
 		InputStream is = exchange.getRequestBody();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String line = reader.readLine();
@@ -51,6 +58,7 @@ public final class RegistrationHandler implements HttpHandler {
 			String token = sessionManager.createSession(u);
 			HttpHelper.writeResponse(token, content, exchange, sessionManager);
 		} catch (Exception ex) {
+			logger.info(ex.getMessage());
 			HttpHelper.writeError(500, ex.getMessage(), exchange);
 		}
 	}

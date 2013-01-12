@@ -6,10 +6,14 @@ import java.util.Map;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.model.User;
 import ch.fhnw.apsi.cookies.server.validation.UserValidator;
 
 public final class UserManager {
+	
 	private final UserValidator validator = UserValidator.createDefaultUserValidator(this);
 	private final Map<String, User> users = new HashMap<>();
 	
