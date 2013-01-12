@@ -1,3 +1,10 @@
+\section{Ziel der Arbeit}
+
+Das Ziel unserer Arbeit war es, möglichst sicher und ohne Logik auf der Client-Seite eine 
+Authentifizierung eines Clients durchzuführen. Als Client soll jeder Browser verwendet werden können.
+Insbesondere sollen \textit{Replay} Attacken so gut wie möglich verhindert werden.
+
+
 \section{Architektur}
 
 Dieses Kapitel erläutert den Aufbau unserer Applikation.
@@ -71,7 +78,7 @@ Die innere Struktur des Cookie ist in Listing \ref{lst:cookie} beschrieben.
 
 \begin{lstlisting}[caption=Innere Struktur des Cookie,label={lst:cookie}]
 token | expiration timestamp | AES(data, k) 
-| HMAC(tokent | expiration timestamp | data | SSL Session Key, k)
+| HMAC(token | expiration timestamp | data | SSL Session Key, k)
 
 k = HMAC(token | expiration timestamp, sk)
 sk = server key
@@ -101,7 +108,7 @@ function checkCookie(cookie, requestHeader) {
 
     if(decrypt failed) return FALSE
 
-    expected = HMAC(tokent | expiration timestamp | data | SSL Session Key, k)
+    expected = HMAC(token | expiration timestamp | data | SSL Session Key, k)
 
     if(expected != cookie.hash) return FALSE
 
@@ -129,7 +136,7 @@ sessionrelevanten Informationen bei jedem Request komplett geändert werden, än
 Ausgangslage für einen Angreifer sehr schnell, was einen Angriff extrem erschwert.
 \newline
 \begin{lstlisting}[caption=Erneuern einer Session,label={lst:renew}]
-function renewSession(oldTokent) {
+function renewSession(oldToken) {
     sess = getSession(oldToken)
     if(sess == null) return null
 
