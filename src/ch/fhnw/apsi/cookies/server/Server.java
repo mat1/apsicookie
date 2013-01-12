@@ -3,6 +3,9 @@ package ch.fhnw.apsi.cookies.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.validation.HeaderInfoHasher;
 import ch.fhnw.apsi.cookies.server.validation.RequestValidator;
@@ -10,6 +13,7 @@ import ch.fhnw.apsi.cookies.server.validation.RequestValidator;
 import com.sun.net.httpserver.HttpServer;
 
 public final class Server {
+	private static final Logger logger = LogManager.getLogger(Server.class.getName());
 	private static final int MAX_QUEUE = 0; /* use system default */
 	private static final int PORT = 8000;
 	
@@ -30,6 +34,7 @@ public final class Server {
 			server.setExecutor(null); // creates a default executor
 			server.start();
 		} catch (IOException ex) {
+			logger.fatal("Error starting server.", ex);
 			throw new RuntimeException(ex);
 		}
 	}

@@ -12,12 +12,16 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * http://www.cse.msu.edu/~alexliu/publications/Cookie/cookie.pdf
  * 
  * @author Florian Luescher
  */
 public final class CookieManager {
+	private static Logger logger = LogManager.getLogger(CookieManager.class.getName());
 	private static final String AES = "AES";
 	private static final String PBKDF2_WITH_HMAC_SHA1 = "PBKDF2WithHmacSHA1";
 	
@@ -51,6 +55,7 @@ public final class CookieManager {
 			return parts[0];
 		}
 		
+		logger.info("Extracting of token failed");
 		return "";
 	}
 	
