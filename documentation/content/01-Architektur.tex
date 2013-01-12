@@ -57,3 +57,71 @@ Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der To
 	\caption{Loginprozess}
 	\label{fig:process}
 \end{figure}
+
+\subsection{Cookie Authentification}
+
+Die Schwierigkeit liegt darin, ein Cookie so aufzubauen, dass es für einen Angreifer schwierig ist (oder gar unmöglich), den Inhalt zu
+erraten und so ein eigenes Cookie zu erstellen. Zu dem soll die Confidentiality der Daten, welche im Cookie gespeichert wurden
+gewährleistet sin. Es soll also für einen angreifer nicht möglich sein, die Daten im Cookie zu lesen. Wir haben uns entschieden
+ein \textit{Secure Cookie Protocol} zu implementieren, wie es in \cite{securecookie} beschrieben ist.
+
+\subsubsection{Struktur}
+
+Die innere Struktur des Cookie ist in Listing \ref{lst:cookie} beschrieben.
+
+\begin{lstlisting}[caption=Innere Struktur des Cookie,label={lst:cookie}]
+token | expiration timestamp | AES(data, k) 
+| HMAC(tokent | expiration timestamp | data | SSL Session Key, k)
+
+k = HMAC(token | expiration timestamp, sk)
+sk = server key
+HMAC(d,k) = Hash based message authentication code using data d and key k
+\end{lstlisting}
+
+\subsubsection{Verifizieren eines Cookies}
+
+Das Listing \ref{lst:verify} zeigt den Ablauf des Verifizierens eines Cookies in pseudocode. 
+Dies kann an mehreren Stellen fehlschlagen. Die dabei verwendete Funktion headerHash generiert 
+aus einem Client Request Header einen hash, welcher den Client identifizieren soll. Das Verfahren
+dazu wird in Listing{lst:header} beschrieben. Da im Cookie die IP des Clients sowie seine Header
+als Hash gespeichert wurden, ist es für einen Angreifer extrem schwiereig ein gestohlenes Cookie
+wiederzuverwenden. Er müsste es von der selben IP und mit dem exakt gleichen Header an den Server
+schicken, was einen erfolgreichen Angriff extrem erschwert.
+\newline
+\begin{lstlisting}[caption=Verifikation eines Cookies,label={lst:verify}]
+function checkCookie(cookie, requestHeader) {
+    if(sessionmanager has no token = cookie.token) return FALSE
+    sk = sessionmanager.getServerKeyForClient(cookie.token)
+
+    if(cookie.expirationTime < current type) return FALSE
+
+    k =  HMAC(token | expiration timestamp, sk)
+
+    descypted = decrypt(cookie.data, k)
+
+    if(decrypt failed) return FALSE
+
+    expected = HMAC(tokent | expiration timestamp | data | SSL Session Key, k)
+
+    if(expected != cookie.hash) return FALSE
+
+    if(headerHash(request) != decrypted) return FALSE
+
+    return TRUE
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Hashen des Headers eines Client Requests,label={lst:verify}]
+function headerHash(request) {
+    toHash = request.clientIP
+    toHash += request.headers
+
+    return SHA-256(toHash) 
+}
+\end{lstlisting}
+
+\subsubsection{Erneuern eines Cookies}
+
+Nach jedem Request eines Clients wird dessen Session Informationen und das dazugehörende Cookie
+erneuert. So ist ein Cookie immer nur genau einmal gültig und kann von einem Angreifer so kaum 
+benutzt werden.
