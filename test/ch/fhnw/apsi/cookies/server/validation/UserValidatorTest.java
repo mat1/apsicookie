@@ -15,7 +15,7 @@ public class UserValidatorTest {
 	
 	@Before
 	public void setUp() {
-		underTest = UserValidator.createDefaultUserValidator(new UserManager());
+		underTest = UserValidator.createDefaultUserValidator(UserManager.create());
 	}
 	
 	@Test

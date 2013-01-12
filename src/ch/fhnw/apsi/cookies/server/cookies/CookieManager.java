@@ -27,6 +27,8 @@ public final class CookieManager {
 	
 	private final byte[] salt = generateKey(8);
 	
+	private CookieManager() {};
+	
 	@CheckReturnValue
 	public String getCookieString(String token, long expiretime, String data, byte[] sk) {
 		byte[] k = hmacEncode(sk, token+String.valueOf(expiretime));

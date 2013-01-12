@@ -62,7 +62,7 @@ public final class RegistrationHandler implements HttpHandler {
 		return pair[1];
 	}
 
-	public static RegistrationHandler createRegistrationHandler(SessionManager sessionMgr, UserManager userManager) throws FileNotFoundException {
+	public static RegistrationHandler create(SessionManager sessionMgr, UserManager userManager) throws FileNotFoundException {
 		return new RegistrationHandler(sessionMgr, userManager);
 	}
 

@@ -14,7 +14,9 @@ import javax.annotation.Nonnull;
  * @author Matthias Brun
  */
 public final class FileHelper {
-
+	
+	private FileHelper() {}
+	
 	public static String fileToString(@Nonnull File file) throws FileNotFoundException {
 		if (!file.canRead())
 			throw new FileNotFoundException("Could not read file. " + file);

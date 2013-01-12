@@ -15,7 +15,7 @@ public final class WelcomeHandler implements HttpHandler {
 	private static final String INDEX_HTML = "res/index.html";
 	private final String content;
 
-	public WelcomeHandler() throws FileNotFoundException {
+	private WelcomeHandler() throws FileNotFoundException {
 		content = FileHelper.fileToString(new File(INDEX_HTML));
 	}
 
@@ -25,6 +25,10 @@ public final class WelcomeHandler implements HttpHandler {
 		OutputStream os = exchange.getResponseBody();
 		os.write(content.getBytes());
 		os.close();
+	}
+	
+	public static WelcomeHandler create() throws FileNotFoundException {
+		return new WelcomeHandler();
 	}
 
 }

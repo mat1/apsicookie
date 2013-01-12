@@ -13,7 +13,9 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
 public final class HttpHelper {
-	private static final HeaderInfoHasher hasher = new HeaderInfoHasher();
+	private static final HeaderInfoHasher hasher = HeaderInfoHasher.create();
+	
+	private HttpHelper() {}
 	
 	public static void writeError(int status, String message,@Nonnull HttpExchange exchange) {
 		try {

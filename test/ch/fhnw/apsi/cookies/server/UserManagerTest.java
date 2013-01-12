@@ -11,7 +11,7 @@ public class UserManagerTest {
 	
 	@Before
 	public void setUp() {
-		underTest = new UserManager();
+		underTest = UserManager.create();
 	}
 	
 	@Test(expected=InvalidUserNameException.class)
