@@ -4,9 +4,7 @@ In diesem Kapitel wird das Vorgehen bei der Entwicklung erläutert.
 
 \subsection{Unittests}
 
-Bei der Entwicklung wurden von Beginn an Unittests verwendet um die Funktionsweise des HtmlFilters zu überprüfen.
-Es wurden für alle Tests unter \url{https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet} ein entsprechender JUnitTest erstellt.
-Dadurch konnte bei einer Anpassung eines Filters schnell überprüft werden, ob der bösartige HTML Code noch entfernt wird.
+Bei der Entwicklung wurden von Beginn an Unittests verwendet um die Funktionsweise der einzelnen Komponenten zu überprüfen.
 
 \subsection{FindBugs}
 
@@ -17,14 +15,13 @@ früh identifizieren zu können. Am Ende der Entwicklung meldete Findbugs keiner
 
 Um FindBugs die Arbeit zu erleichtern, haben wir im gesamten Sourcecode die Annotationen aus dem JSR-305 
 verwendet.
+
 \subsection{Robust Programming}
 
 Bei der Entwicklung wurde Wert darauf gelegt, Robuste Java Klassen zu entwickeln. Aus diesem Grund 
-sind alle Klassen, welche nicht zur Ableitung gedacht sind \textit{final}. Bei den Abstrakten Klassen,
-welche zur Ableitung designt sind, sind alle Methoden \textit{final}, die nicht von Subklassen überschrieben
-werden sollen. Bei allen Klassen wurde die Sichtbarkeit der Felder minimiert, sowie auf innere Klassen 
+sind alle Klassen, welche nicht zur Ableitung gedacht sind \textit{final}. 
+Bei allen Klassen wurde die Sichtbarkeit der Felder minimiert, sowie auf innere Klassen 
 verzichtet, um die Sichbarkeitseinschränkung nicht zu umgehen. Wenn immer möglich, wurden die 
-Konstruktoren \textit{private} deklariert, und Factory-Methoden implementiert. Dies ist insbesondere
-bei den Filter implementierungen zu sehen, welche meistens eine \textit{createDefault} Methode 
-bereitstellen.\newline
+Konstruktoren \textit{private} deklariert, und Factory-Methoden implementiert.
+\newline
 
