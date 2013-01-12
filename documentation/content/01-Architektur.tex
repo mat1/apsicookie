@@ -48,7 +48,7 @@ SessionManager & Verwaltet die ClientSessions. Ordnet jeder Session ein Token zu
 \subsection{Authentifizierungsablauf}
 
 Das Aktivitätsdiagramm Abbildung \ref{fig:process} beschreibt den Loginprozess bei einer HTTP-POST Anfrage auf /register mit einem gültigen Benutzernamen und E-Mail Adresse.
-Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der Token ID setzt.
+Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der Token ID setzt. Die Generierung des Cookies wird im nächsten Abschnitt beschrieben.
 
 \begin{figure}[H]
 	\begin{center}
