@@ -13,7 +13,7 @@ public class CookieManagerTest {
 	
 	@Before
 	public void setUp() {
-		mgr = new CookieManager();
+		mgr = CookieManager.create();
 	}
 	
 	@Test
@@ -79,7 +79,7 @@ public class CookieManagerTest {
 	
 	@Test
 	public void testKeyGeneration() {
-		CookieManager mgr = new CookieManager();
+		CookieManager mgr = CookieManager.create();
 		byte[] key1 = mgr.generateKey(8);
 		byte[] key2 = mgr.generateKey(8);
 		

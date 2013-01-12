@@ -27,6 +27,8 @@ public final class HeaderInfoHasher {
 		ignored.add("referer");
 	}
 	
+	private HeaderInfoHasher() {}
+	
 	public String generateHeaderInfoHash(@Nonnull InetAddress addr, @Nonnull Headers headers) {
 		byte[] address = addr.getAddress();
 		byte[] heads = concatenateHeader(headers).getBytes();
@@ -69,5 +71,9 @@ public final class HeaderInfoHasher {
 		for(String s: str) {
 			builder.append(s);
 		}
+	}
+	
+	public static HeaderInfoHasher create() {
+		return new HeaderInfoHasher();
 	}
 }

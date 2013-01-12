@@ -13,7 +13,7 @@ public final class UserManager {
 	private final UserValidator validator = UserValidator.createDefaultUserValidator(this);
 	private final Map<String, User> users = new HashMap<>();
 	
-	public UserManager() {}
+	private UserManager() {}
 	
 	@CheckReturnValue
 	public User createUser(String name, String email) {
@@ -29,5 +29,9 @@ public final class UserManager {
 	@CheckReturnValue
 	public User getUser(@Nonnull String name) {
 		return users.get(name);
+	}
+	
+	public static UserManager create() {
+		return new UserManager();
 	}
 }

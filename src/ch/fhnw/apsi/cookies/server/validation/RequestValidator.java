@@ -35,7 +35,7 @@ public final class RequestValidator {
 		return mgr;
 	}
 	
-	public static RequestValidator createRequestValidator(SessionManager mgr, HeaderInfoHasher hsh) {
+	public static RequestValidator create(SessionManager mgr, HeaderInfoHasher hsh) {
 		return new RequestValidator(mgr, hsh);
 	}
 }

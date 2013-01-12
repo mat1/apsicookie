@@ -31,7 +31,7 @@ public final class SecureContentHandler implements HttpHandler {
 		
 	}
 
-	public static SecureContentHandler createSecureContentHandler(RequestValidator val) {
+	public static SecureContentHandler create(RequestValidator val) {
 		return new SecureContentHandler(val);
 	}
 }

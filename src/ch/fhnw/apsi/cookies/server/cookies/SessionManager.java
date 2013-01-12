@@ -20,6 +20,8 @@ public final class SessionManager {
 	private final Map<String,ClientSession> sessions = new HashMap<>();
 	private final CookieManager cookieManager = CookieManager.create();
 	
+	private SessionManager() {}
+	
 	@CheckReturnValue
 	public String createSession(@Nonnull User user) {
 		final String token = generateToken();
@@ -92,5 +94,9 @@ public final class SessionManager {
 	@CheckReturnValue
 	private String generateToken() {
 		return new BigInteger(TOKEN_BITS, random).toString(32);
+	}
+	
+	public static SessionManager create() {
+		return new SessionManager();
 	}
 }
