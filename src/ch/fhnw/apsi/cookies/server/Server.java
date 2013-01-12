@@ -9,9 +9,9 @@ import ch.fhnw.apsi.cookies.server.validation.RequestValidator;
 
 import com.sun.net.httpserver.HttpServer;
 
-public class Server {
-	private static final int maxQueue = 0; /* use system default */
-	private final int port = 8000;
+public final class Server {
+	private static final int MAX_QUEUE = 0; /* use system default */
+	private static final int PORT = 8000;
 	
 	private final UserManager userManager;
 	private final SessionManager sessManager;
@@ -23,7 +23,7 @@ public class Server {
 	
 	public void serve() {
 		try {
-			HttpServer server = HttpServer.create(new InetSocketAddress(port), maxQueue);
+			HttpServer server = HttpServer.create(new InetSocketAddress(PORT), MAX_QUEUE);
 			server.createContext("/", new WelcomeHandler());
 			server.createContext("/register", RegistrationHandler.createRegistrationHandler(sessManager, userManager));
 			server.createContext("/secured", SecureContentHandler.createSecureContentHandler(RequestValidator.createRequestValidator(sessManager, new HeaderInfoHasher())));

@@ -7,7 +7,7 @@ import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 
 import com.sun.net.httpserver.Headers;
 
-public class RequestValidator {
+public final class RequestValidator {
 	private final HeaderInfoHasher hasher;
 	private final SessionManager mgr;
 	

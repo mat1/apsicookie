@@ -7,15 +7,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+import javax.annotation.Nonnull;
 /**
  * Helper class to read files from folder.
  * 
  * @author Matthias Brun
  */
-public class FileHelper {
+public final class FileHelper {
 
-	public static String fileToString(File file) throws FileNotFoundException {
+	public static String fileToString(@Nonnull File file) throws FileNotFoundException {
 		if (!file.canRead())
 			throw new FileNotFoundException("Could not read file. " + file);
 

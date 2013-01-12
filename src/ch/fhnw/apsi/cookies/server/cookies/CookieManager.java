@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
+import javax.annotation.CheckReturnValue;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
@@ -16,7 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
  * 
  * @author Florian Luescher
  */
-public class CookieManager {
+public final class CookieManager {
 	private static final String AES = "AES";
 	private static final String PBKDF2_WITH_HMAC_SHA1 = "PBKDF2WithHmacSHA1";
 	
@@ -26,6 +27,7 @@ public class CookieManager {
 	
 	private final byte[] salt = generateKey(8);
 	
+	@CheckReturnValue
 	public String getCookieString(String token, long expiretime, String data, byte[] sk) {
 		byte[] k = hmacEncode(sk, token+String.valueOf(expiretime));
 		
@@ -40,6 +42,7 @@ public class CookieManager {
 		return builder.toString();
 	}
 	 
+	@CheckReturnValue
 	public String extractToken(String cookie) {
 		String[] parts = cookie.split("-");
 		if(parts.length >= 1) {
@@ -49,6 +52,7 @@ public class CookieManager {
 		return "";
 	}
 	
+	@CheckReturnValue
 	public String getCookieData(byte[] sk, String cookie) {
 		if(!isValid(sk, cookie)) return null;
 		
@@ -61,6 +65,7 @@ public class CookieManager {
 		return decrypt(k, encrypted);
 	}
 	
+	@CheckReturnValue
 	public boolean isValid(byte[] sk, String cookie) {
 		String[] parts = cookie.split("-");
 		if(parts.length != COOKIE_PARTS)
@@ -122,6 +127,7 @@ public class CookieManager {
 		}
 	}
 
+	@CheckReturnValue
 	public String encrypt(byte[] key, String data) {
 		try {
 			SecretKeyFactory factory = SecretKeyFactory.getInstance(PBKDF2_WITH_HMAC_SHA1);
@@ -139,6 +145,7 @@ public class CookieManager {
 		}
 	}
 	
+	@CheckReturnValue
 	public String decrypt(byte[] key, String data) {
 		try {
 			byte[] encrypted = Base64.decode(data);
@@ -157,7 +164,8 @@ public class CookieManager {
 			throw new RuntimeException(ex);
 		}
 	}
-
+	
+	@CheckReturnValue
 	public static CookieManager create() {
 		return new CookieManager();
 	}
