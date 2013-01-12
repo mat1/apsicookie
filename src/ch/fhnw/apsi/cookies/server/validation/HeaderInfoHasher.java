@@ -10,6 +10,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.cookies.Base64;
 
 import com.sun.net.httpserver.Headers;
@@ -26,6 +29,8 @@ public final class HeaderInfoHasher {
 		ignored.add("connection");
 		ignored.add("referer");
 	}
+	
+	private static final Logger logger = LogManager.getLogger(HeaderInfoHasher.class.getName());
 	
 	private HeaderInfoHasher() {}
 	
@@ -51,6 +56,7 @@ public final class HeaderInfoHasher {
 			md.update(from);
 			return md.digest();
 		} catch (NoSuchAlgorithmException ex) {
+			logger.fatal("Unable to hash", ex);
 			throw new RuntimeException(ex);
 		}
 	}

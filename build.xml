@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project apsicookie with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="/home/florian/data/Dokumente/FHNW/Module/S05/apsi/apsicookie/bin/server.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="ch.fhnw.apsi.cookies.server.Server"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ junit.jar org.hamcrest.core_1.1.0.v20090501071000.jar jsr305-2.0.1.jar log4j-core-2.0-beta3.jar log4j-api-2.0-beta3.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="/home/florian/data/Dokumente/FHNW/Module/S05/apsi/apsicookie/bin"/>
+            <zipfileset dir="/home/florian/Apps/eclipse-juno/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900" includes="junit.jar"/>
+            <zipfileset dir="/home/florian/Apps/eclipse-juno/plugins" includes="org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+            <zipfileset dir="/home/florian/data/Dokumente/FHNW/Module/S05/apsi/apsicookie/lib" includes="jsr305-2.0.1.jar"/>
+            <zipfileset dir="/home/florian/data/Dokumente/FHNW/Module/S05/apsi/apsicookie/lib" includes="log4j-core-2.0-beta3.jar"/>
+            <zipfileset dir="/home/florian/data/Dokumente/FHNW/Module/S05/apsi/apsicookie/lib" includes="log4j-api-2.0-beta3.jar"/>
+        </jar>
+    </target>
+</project>

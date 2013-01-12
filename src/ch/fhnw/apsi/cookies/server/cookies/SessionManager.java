@@ -8,6 +8,9 @@ import java.util.Map;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.model.ClientSession;
 import ch.fhnw.apsi.cookies.server.model.User;
 
@@ -15,7 +18,8 @@ public final class SessionManager {
 	private static final long SESSION_TIMEOUT = 60 * 1000;
 	private static final int TOKEN_BITS = 130;
 	private static final int SERVER_KEY_SIZE = 256;
-	
+
+	private final Logger logger = LogManager.getLogger(getClass());
 	private final SecureRandom random = new SecureRandom();
 	private final Map<String,ClientSession> sessions = new HashMap<>();
 	private final CookieManager cookieManager = CookieManager.create();
@@ -24,6 +28,8 @@ public final class SessionManager {
 	
 	@CheckReturnValue
 	public String createSession(@Nonnull User user) {
+		logger.info("Creating new session for user {}", user.getUserName());
+		
 		final String token = generateToken();
 		final ClientSession sess = ClientSession.createSession(user, token, getNextExpiringTimeFromNow(), cookieManager.generateKey(SERVER_KEY_SIZE));
 		sessions.put(token, sess);
@@ -41,6 +47,8 @@ public final class SessionManager {
 	
 	@CheckReturnValue
 	public boolean isValid(String cookie) {
+		logger.debug("Checking cookie validity {}", cookie);
+		
 		final String token = cookieManager.extractToken(cookie);
 		if(token == null) return false;
 		
@@ -63,15 +71,19 @@ public final class SessionManager {
 	
 	@CheckReturnValue
 	protected ClientSession getSessionFromToken(String token) {
+		logger.debug("Getting session from token {} ", token);
 		return sessions.get(token);
 	}
 	
 	public void removeSession(String token) {
+		logger.info("Removing session {} ", token);
 		sessions.remove(token);
 	}
 	
 	@CheckReturnValue
 	public String updateSession(String oldToken) {
+		logger.info("Renewing session {} ", oldToken);
+		
 		final ClientSession sess = sessions.get(oldToken);
 		if(sess == null) return null;
 		
@@ -83,6 +95,7 @@ public final class SessionManager {
 		sess.setToken(newToken);
 		
 		sessions.put(newToken, sess);
+		logger.info("Renewed session: {} to {}", oldToken, newToken);
 		return newToken;
 	}
 	

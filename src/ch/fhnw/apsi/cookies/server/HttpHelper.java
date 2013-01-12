@@ -73,7 +73,7 @@ public final class HttpHelper {
 	}
 	
 	public static String getTokenCookieValue(Headers headers) {
-		System.out.println(headers.get("Cookie"));
+		logger.info("Received cookie: {}", headers.get("Cookie"));
 		List<String> str = (List<String>) headers.get("Cookie");
 		if(str == null || str.size() != 1) return "";
 		

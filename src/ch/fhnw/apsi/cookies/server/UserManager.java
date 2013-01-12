@@ -13,7 +13,7 @@ import ch.fhnw.apsi.cookies.server.model.User;
 import ch.fhnw.apsi.cookies.server.validation.UserValidator;
 
 public final class UserManager {
-	
+	private static final Logger logger = LogManager.getLogger(UserManager.class.getName());
 	private final UserValidator validator = UserValidator.createDefaultUserValidator(this);
 	private final Map<String, User> users = new HashMap<>();
 	
@@ -24,6 +24,7 @@ public final class UserManager {
 		User user = User.createUser(name, email);
 		
 		if(validator.isValid(user)) {
+			logger.info("Creating new user {}", name);
 			users.put(name, user);
 		}
 		

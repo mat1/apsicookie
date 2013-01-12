@@ -11,10 +11,14 @@ import javax.naming.directory.Attributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ch.fhnw.apsi.cookies.server.UserManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 
 public final class UserValidator {
+	private static final Logger logger = LogManager.getLogger(UserValidator.class.getName());
 	private final Pattern first = Pattern.compile("^[^@]{1,64}@[^@]{1,255}$");
 	private final Pattern second = Pattern.compile("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&\'*+/=?^_`{|}~\\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$");
 	private final Pattern third = Pattern.compile("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$");
@@ -78,6 +82,7 @@ public final class UserValidator {
 			String[] split = mail.split("@");
 			if(split.length != 2) return false;
 			
+			logger.info("Looking up mx record for {}", mail);
 			Hashtable<String,String> env = new Hashtable<>();
 		    env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
 		    DirContext ictx = new InitialDirContext( env );
@@ -87,6 +92,7 @@ public final class UserValidator {
 		    
 		    return true;
 		} catch (NamingException ex) {
+			logger.fatal("Error looking up mx record", ex);
 			return false;
 		}
 	}

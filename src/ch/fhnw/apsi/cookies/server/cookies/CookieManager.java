@@ -35,6 +35,8 @@ public final class CookieManager {
 	
 	@CheckReturnValue
 	public String getCookieString(String token, long expiretime, String data, byte[] sk) {
+		logger.debug("Producing Cookie for " + String.valueOf(token));
+		
 		byte[] k = hmacEncode(sk, token+String.valueOf(expiretime));
 		
 		StringBuilder builder = new StringBuilder();
@@ -103,11 +105,13 @@ public final class CookieManager {
 			
 			return true;
 		} catch (Exception ex) {
+			logger.debug("Token invalid because of cypher fail.");
 			return false;
 		}
 	}
 	
 	public byte[] generateKey(int size) {
+		logger.debug("Generating new key.");
 		SecureRandom random = new SecureRandom();
 		
 		byte[] cur = new byte[1];
@@ -130,6 +134,7 @@ public final class CookieManager {
 			
 			return res;
 		} catch (java.security.InvalidKeyException | NoSuchAlgorithmException ex) {
+			logger.fatal("Unable to encode using HMAC algorithm.", ex);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -148,6 +153,7 @@ public final class CookieManager {
 			
 			return Base64.encodeBytes(encrypted);
 		} catch (Exception ex) {
+			logger.fatal("Unable to encypt using AES algorithm.", ex);
 			throw new RuntimeException(ex);
 		}
 	}
@@ -168,6 +174,7 @@ public final class CookieManager {
 			
 			return new String(decrypted);
 		} catch (Exception ex) {
+			logger.fatal("Unable to decrypt using AES algorithm.", ex);
 			throw new RuntimeException(ex);
 		}
 	}
