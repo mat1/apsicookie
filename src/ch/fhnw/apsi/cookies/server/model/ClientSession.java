@@ -1,13 +1,15 @@
 package ch.fhnw.apsi.cookies.server.model;
 
-public class ClientSession {
+import javax.annotation.Nonnull;
+
+public final class ClientSession {
 	private final User owner;
 
 	private String token;
 	private long expiringTime;
 	private byte[] currentKey;
 	
-	private ClientSession(User owner, String token, long expiringTime, byte[] key) {
+	private ClientSession(@Nonnull User owner, @Nonnull String token, long expiringTime, byte[] key) {
 		this.owner = owner;
 		this.token = token;
 		this.expiringTime = expiringTime;
@@ -56,8 +58,8 @@ public class ClientSession {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)		return true;
-		if (obj == null)		return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
 		
 		ClientSession other = (ClientSession) obj;

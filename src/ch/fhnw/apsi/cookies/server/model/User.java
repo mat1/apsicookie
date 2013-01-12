@@ -1,10 +1,12 @@
 package ch.fhnw.apsi.cookies.server.model;
 
-public class User {
+import javax.annotation.Nonnull;
+
+public final class User {
 	private final String userName;
 	private final String mail;
 	
-	private User(String userName, String mail) {
+	private User(@Nonnull String userName, @Nonnull String mail) {
 		this.userName= userName;
 		this.mail = mail;
 	}

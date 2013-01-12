@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import ch.fhnw.apsi.cookies.server.cookies.Base64;
 
 import com.sun.net.httpserver.Headers;
 
-public class HeaderInfoHasher {
+public final class HeaderInfoHasher {
 	private static final Set<String> ignored = new HashSet<>();
 	static {
 		ignored.add("host");
@@ -25,7 +27,7 @@ public class HeaderInfoHasher {
 		ignored.add("referer");
 	}
 	
-	public String generateHeaderInfoHash(InetAddress addr, Headers headers) {
+	public String generateHeaderInfoHash(@Nonnull InetAddress addr, @Nonnull Headers headers) {
 		byte[] address = addr.getAddress();
 		byte[] heads = concatenateHeader(headers).getBytes();
 		byte[] toEncode = new byte[address.length+heads.length];

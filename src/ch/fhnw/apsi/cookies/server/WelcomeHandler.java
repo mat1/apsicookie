@@ -5,10 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnull;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class WelcomeHandler implements HttpHandler {
+public final class WelcomeHandler implements HttpHandler {
 
 	private static final String INDEX_HTML = "res/index.html";
 	private final String content;
@@ -18,7 +20,7 @@ public class WelcomeHandler implements HttpHandler {
 	}
 
 	@Override
-	public void handle(HttpExchange exchange) throws IOException {
+	public void handle(@Nonnull HttpExchange exchange) throws IOException {
 		exchange.sendResponseHeaders(200, content.length());
 		OutputStream os = exchange.getResponseBody();
 		os.write(content.getBytes());

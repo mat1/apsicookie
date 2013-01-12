@@ -3,6 +3,8 @@ package ch.fhnw.apsi.cookies.server.validation;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -12,15 +14,15 @@ import javax.naming.directory.InitialDirContext;
 import ch.fhnw.apsi.cookies.server.UserManager;
 import ch.fhnw.apsi.cookies.server.model.User;
 
-public class UserValidator {
+public final class UserValidator {
 	private final Pattern first = Pattern.compile("^[^@]{1,64}@[^@]{1,255}$");
 	private final Pattern second = Pattern.compile("^(([A-Za-z0-9!#$%&'*+/=?^_`{|}~-][A-Za-z0-9!#$%&\'*+/=?^_`{|}~\\.-]{0,63})|(\"[^(\\|\")]{0,62}\"))$");
 	private final Pattern third = Pattern.compile("^(([A-Za-z0-9][A-Za-z0-9-]{0,61}[A-Za-z0-9])|([A-Za-z0-9]+))$");
 	
-	private final UserManager mgr;
+	private final UserManager manager;
 	
-	private UserValidator(UserManager mgr) { 
-		this.mgr = mgr;
+	private UserValidator(@Nonnull UserManager mgr) { 
+		this.manager = mgr;
 	}
 	
 	/**
@@ -31,9 +33,7 @@ public class UserValidator {
 	 * @param u the user to check
 	 * @return whether the check was succesful or not
 	 */
-	public boolean isValid(User u) {
-		
-		
+	public boolean isValid(@Nonnull User u) {
 		if(!emailFormatValid(u.getMail()))
 			throw new InvalidEmailException("Invalid email format");
 		
@@ -59,13 +59,13 @@ public class UserValidator {
 		if(!first.matcher(mail).matches()) return false;
 		
 		String[] parts = mail.split("@");
-		String[] locals = parts[0].split(".");
+		String[] locals = parts[0].split("\\.");
 		
 		for(String l : locals) {
 			if(!second.matcher(l).matches()) return false;
 		}
 		
-		String[] domains = parts[1].split(".");
+		String[] domains = parts[1].split("\\.");
 		for(String domain: domains) {
 			if(!third.matcher(domain).matches()) return false;
 		}
@@ -92,9 +92,10 @@ public class UserValidator {
 	}
 	
 	private boolean userExists(String name) {
-		return mgr.getUser(name) != null;
+		return manager.getUser(name) != null;
 	}
 	
+	@CheckReturnValue
 	public static UserValidator createDefaultUserValidator(UserManager mgr) {
 		return new UserValidator(mgr);
 	}

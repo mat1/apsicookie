@@ -4,16 +4,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import ch.fhnw.apsi.cookies.server.cookies.SessionManager;
 import ch.fhnw.apsi.cookies.server.validation.HeaderInfoHasher;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
-public class HttpHelper {
+public final class HttpHelper {
 	private static final HeaderInfoHasher hasher = new HeaderInfoHasher();
 	
-	public static void writeError(int status, String message, HttpExchange exchange) {
+	public static void writeError(int status, String message,@Nonnull HttpExchange exchange) {
 		try {
 			Headers headerResponse = exchange.getResponseHeaders();
 			headerResponse.set("Set-Cookie", "token=nothing;" +
@@ -28,7 +30,7 @@ public class HttpHelper {
 		}
 	}
 	
-	public static void writeResponse(String token, String message, HttpExchange exchange, SessionManager mgr) { 
+	public static void writeResponse(String token, String message,@Nonnull HttpExchange exchange, SessionManager mgr) { 
 		final String data = hasher.generateHeaderInfoHash(exchange.getRemoteAddress().getAddress(), exchange.getRequestHeaders());
 		
 		try {
