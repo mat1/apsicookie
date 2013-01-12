@@ -110,7 +110,7 @@ function checkCookie(cookie, requestHeader) {
     return TRUE
 }
 \end{lstlisting}
-
+\newpage
 \begin{lstlisting}[caption=Hashen des Headers eines Client Requests,label={lst:verify}]
 function headerHash(request) {
     toHash = request.clientIP
@@ -124,4 +124,25 @@ function headerHash(request) {
 
 Nach jedem Request eines Clients wird dessen Session Informationen und das dazugehörende Cookie
 erneuert. So ist ein Cookie immer nur genau einmal gültig und kann von einem Angreifer so kaum 
-benutzt werden.
+benutzt werden. Das Verfahren ist in Listing \ref{lst:renew} erleutert. Dadurch, dass alle 
+sessionrelevanten Informationen bei jedem Request komplett geändert werden, ändert sich die
+Ausgangslage für einen Angreifer sehr schnell, was einen Angriff extrem erschwert.
+\newline
+\begin{lstlisting}[caption=Erneuern einer Session,label={lst:renew}]
+function renewSession(oldTokent) {
+    sess = getSession(oldToken)
+    if(sess == null) return null
+
+    removeSession(oldToken)
+
+    newToken = generateToken()
+
+    sess.expiringTime = current + TIMEOUT_TIME
+    sess.currentKey = generateKey()
+    sess.token = newToken
+
+    putSession(newToken, sess)
+
+    return newToken
+}
+\end{lstlisting}
