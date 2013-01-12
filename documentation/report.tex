@@ -1,0 +1,49 @@
+\documentclass[a4paper]{template/imereport}
+\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{float}
+
+\lstset{ %
+ captionpos=b,
+ breaklines=true,
+ basicstyle=\footnotesize\ttfamily,
+ frame=single
+}
+
+\pagestyle{myheadings}
+\markboth{Sicherheit mit Cookies}{Sicherheit mit Cookies}
+
+% Title section
+\author{Florian Lüscher, Matthias Brun\\
+Fachhochschule Nordwestschweiz\\
+\small{\texttt{<\{florian.luescher,matthias.brun\}@students.fhnw.ch>}}
+}
+\title{Sicherheit mit Cookies: Authentifizierung mit Cookies}
+
+\begin{document}
+
+\maketitle
+
+% Einleitung
+\input{content/00-einleitung}
+
+% Inhalt
+\input{content/inhalt}
+
+% Schluss
+\input{content/99-schluss}
+
+\vspace{50pt}
+
+\vspace{20pt}
+
+% Quellverzeichnis
+\bibliographystyle{IEEEtran}
+\bibliography{report.bib}
+
+\end{document}
