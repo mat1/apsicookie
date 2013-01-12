@@ -2,7 +2,7 @@
 
 Dieses Kapitel erläutert den Aufbau unserer Applikation.
 Auf der Abbildung \ref{fig:overview} sind die Klassen und Interfaces der Applikation ersichtlich. In der Tabelle \ref{tab:class} sind
-die wichtigsten Klassen beschrieben mit Ausnahme der Filter Klassen, diese sind in der Tabelle \ref{tab:filter} aufgelistet. Wir verwenden das Pipe and Filter Pattern. Dies ermöglicht es die Applikation um weitere Filter einfach zu erweitern. 
+die wichtigsten Klassen beschrieben.
 
 \begin{figure}[ht]
 	\begin{center}
@@ -17,11 +17,7 @@ die wichtigsten Klassen beschrieben mit Ausnahme der Filter Klassen, diese sind 
 \begin{tabular}{l p{10.5cm} }
 \hline
 \textbf{Klasse} & \textbf{Beschreibung} \\ \hline \hline
-HtmlFilter & Einstiegspunkt in die Applikation. \\
-Pipe & Verwaltet die Filter und startet den Filterprozess. \\
-AbstractAllNodeFilter & Besucht alle Nodes und ruft für jeden Node filterNode auf. Wenn alle Nodes besucht wurden, wird visitCompleted aufgerufen. \\
-AbstractNodeVisitor & Ruft bei allen Nodes welche in der nodesToVisit Liste sind filterNode auf. \\
-AbstractAttributeFilter & Besucht alle Nodes und prüft ob sie eines der zugelassenen Attribute enthalten. Wenn ja, wird filterAttribute augerufen. \\
+Klasse & Einstiegspunkt in die Applikation. \\
 \hline \hline
 \end{tabular}
 \caption{Klassen}
@@ -29,40 +25,22 @@ AbstractAttributeFilter & Besucht alle Nodes und prüft ob sie eines der zugelas
 \end{center}
 \end{table}
 
-\newpage
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{l l p{7cm} }
+\hline
+\textbf{Pfad} & \textbf{Handler}    & \textbf{Beschreibung} \\ \hline \hline
+/             & Welcome Handler         & Stellt die Loginseite index.html dar.\\
+/register     & RegistrationHandler     & Verarbeitet die Registierungsanfrage und zeigt, wenn die Registierung erfoglreich war, einen Link zum Secure Content an. \\
+/secured      & SecuredContentHandler   & Stellt wenn der Benutzer erfoglreich authentifiziert ist den Secure Content dar.\\
+\hline \hline
+\end{tabular}
+\caption{URL-Mapping}
+\label{tab:url-mapping}
+\end{center}
+\end{table}
 
-\subsection{DOM Parser}
-
-Eine sehr wichtige Komponente des Mail Filters ist der Parser, welcher das HTML in das Document
-Object Model (DOM) verwandelt. Nebst dem Parsen ist er zusätzlich dafür verantwortlich, alle Character
-Encodings korrekt zu interpretieren und in Java Unicode Character Strings zu verwandeln. Aus diesem 
-Grund wurde viel Wert auf die Auswahl eines geeigneten Parsers gelegt. Wir entschieden uns am Schluss 
-für den Parser \textit{jsoup}\cite{DOM:JSOUP}. Diese Opensource Bibliothek erfüllte alle unsere 
-Anforderungen und ist zudem sehr gut dokumentiert. 
-
-\subsection{Authentifizierung}
-
-Um sicherzustellen, dass lediglich Benutzer mit Administrationsrechten die Applikation ausführen können,
-haben wir die Authentifizierung mittels JAAS implementiert. Damit die Plattformunabhängigkeit 
-gewährleistet bleibt, haben wir sowohl das Login für Windows, als auch für Unix basierte Systeme 
-implementiert. Die JAAS-Konfiguration ist in Listing \ref{lst:jaas} ersichtlich. Dabei wird je
-nach verwendetem System der entsprechende LoginContext geladen. Im Falle von Unix wird dabei auf eine
-Gruppe 0 des angemeldeten Benutzer überprüft, im Falle von Windows auf die Well-known-group 
-SID\cite{MS:SID} \textit{S-1-5-32-544}, welche die Gruppe der lokalen Administratoren identifiziert. 
-\newline
-\begin{lstlisting}[caption="JAAS konfiguration im File jaas\_security.conf", label={lst:jaas}]
-Unix {
-        com.sun.security.auth.module.UnixLoginModule required debug=false;
-};
-
-Windows {
-        com.sun.security.auth.module.NTLoginModule required debug=false;
-};
-\end{lstlisting}
-
-\newpage
-
-\subsection{Verarbeitungsprozess}
+\subsection{Authentifizierungsablauf}
 
 Das Aktivitätsdiagramm Abbildung \ref{fig:process} beschreibt den Verarbeitungsprozess vom Starten der Applikation, bis zur Ausgabe des gesäuberten HTML Codes.
 
@@ -73,91 +51,3 @@ Das Aktivitätsdiagramm Abbildung \ref{fig:process} beschreibt den Verarbeitungs
 	\caption{Verarbeitungsprozess}
 	\label{fig:process}
 \end{figure}
-
-\newpage
-
-\subsection{Filter}
-
-Dieser Abschnitt beschreibt die implementierten Filter. 
-In der Tabelle \ref{tab:filter} sind die implementierten Filter aufgelistet. Die Filter operieren auf dem erstellten HTML-DOM.
-Jeder Filter bekommt als Eingabe den HTML-Baum. Beim Filterprozess werden HTML und CSS Tags und Attribute entfernt, ersetzt und geändert.
-\newline
-
-\begin{table}[H]
-\begin{center}
-\begin{tabular}{l p{10.5cm} }
-\hline
-\textbf{Filter} & \textbf{Beschreibung} \\ \hline \hline
-TagWhitelistFilter & Dieser Filter entfernt alle HTML Tags welche nicht in der Whitelist enthalten sind. 
-Beim Entfernen eines HTML Tags werden auch die zugehörigen HTML Child Nodes entfernt. \\ 
-
-AttributeWhitelistFilter & Der Attribute Whitelist Filter entfernt alle HTML Attribute welche nicht in der Whitelist enthalten sind. \\
-
-ProtocolFilter & Der Protocol Filter setzt bei den HTML Attributen href und src den Wert auf '', wenn das Protokoll nicht in der Whitelist vorhanden ist. \\
-
-SrcUrlFilter & Dieser Filter entfernt den Query Parameter beim HTML src Attribut aus der URL. Dies verhindert z.B. folgende URLs http://www.test.com/test.php?somevariables=maliciouscode in img Tags. \\
-
-CssCleaner & Dies ist kein Filter, wird aber von Css Filter Klassen verwendet. Der CssCleaner entfernt mit Hilfe von Regular Expressions -moz-binding, behavior, @import, expression und url Tags. \\
-
-CssStyleAttributeFilter & Dieser Filter verwendet den Css Cleaner und entfernt bei allen HTML Style Attributen die oben beschriebenen CSS Tags. \\
-
-CssInlineFilter & Dieser Filter verwendet ebenfalls den Css Cleaner und wird bei allen HTML Style Tags angewendet. \\
-
-CssLinkFilter & Dieser Filter entfernt alle HTML Link Tags welche auf ein externes CSS File verweisen. \\
-
-\hline \hline
-\end{tabular}
-\caption{Filter}
-\label{tab:filter}
-\end{center}
-\end{table}
-
-\newpage
-
-\subsection{Whitelist}
-In der Tabelle \ref{tab:whitelist} sind die zugelassenen HTML Tags, Attribute und Protokolle aufgelistet.
-\begin{table}[H]
-\begin{center}
-\begin{tabular}{l l l}
-\hline
-\textbf{Tag} & \textbf{Attribut} & \textbf{Protokoll} \\ \hline \hline
-html & & \\ 
-head & & \\ 
-body & & \\ 
-a & href & http, https \\ 
-b & & \\ 
-blockquote & & \\ 
-br & & \\ 
-caption & & \\ 
-col & & \\ 
-colgroup & & \\ 
-div & & \\ 
-em & & \\ 
-h1-h6 & & \\
-img & align, alt, height, src, title, width & http, https \\ 
-li & & \\  
-ol & & \\  
-ul & type & \\  
-p & & \\  
-pre & & \\  
-small & & \\  
-strike & & \\  
-strong & & \\  
-table & summary, width & \\  
-tbody & & \\  
-td & abbr, axis, colspan, rowspan, width & \\  
-tfoot & & \\  
-th & abbr, axis, colspan, rowspan, scope, width & \\  
-thead & & \\  
-tr & & \\  
-span & & \\  
-style & type & \\  
-link & href & http, https \\
-\hline \hline
-\end{tabular}
-\caption{Whitelist}
-\label{tab:whitelist}
-\end{center}
-\end{table}
-
-Immer erlaubt sind die HTML Attribute style, class, id und name.
