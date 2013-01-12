@@ -146,3 +146,9 @@ function renewSession(oldTokent) {
     return newToken
 }
 \end{lstlisting}
+
+\subsection{Kryptographische Funktionen}
+
+Wir haben für die kryptographischen Funktionen die Crypto Tools des java.security Packets benutzt. Auch für die Generierung
+der Tokens, sowie der serverseitigen Keys wurde die \textit{SecureRandom}-Klasse verwendet. Dies macht es unmöglich, die
+generierten Tokent vorherzusagen.
