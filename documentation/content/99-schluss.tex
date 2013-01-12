@@ -1,6 +1,7 @@
 \section{Weitere Arbeiten}
 
-Durch das Pipe und Filter Pattern könnte die Applikation um beliebige neue Filter erweitert werden. Es ist sehr einfach möglich weitere HTML Tags und Attribute zur Whitelist hinzuzufügen. Interessant wäre die Erweiterung um verschiedene HTML Ausgabemöglichkeiten z.B. ohne Bilder, nur Text etc. je nach Anwendungsbereich.
+Durch das Pipe und Filter Pattern könnte die Applikation um beliebige neue Filter erweitert werden. Es ist sehr einfach möglich weitere HTML Tags und Attribute zur Whitelist 
+hinzuzufügen. Interessant wäre die Erweiterung um verschiedene HTML Ausgabemöglichkeiten z.B. ohne Bilder, nur Text etc. je nach Anwendungsbereich.
 
 \section{Starten der Applikation}
 
@@ -9,49 +10,3 @@ Die Applikation kann über die Konsole mit folgendem Command gestarted werden:
 \begin{lstlisting}[caption=Start der Applikation]
 sudo java -Djava.security.auth.login.config=jaas_security.conf -jar filter.jar 
 \end{lstlisting}
-\newpage
-\begin{appendix}
-\section{Cleaned up HTML}
-
-Die Ausgabe des Test Files ist sehr restriktiv. Sie ist in Listing \ref{lst:output} ersichtlich. 
-Jedoch haben wir auch Tests mit den FHNW Newslettern
-durchgeführt um zu schauen, wie der Filter auf korrekten Mails funktioniert. Die Resultate waren sehr 
-zufriedenstellend. 
-
-\begin{lstlisting}[caption=Resultat des Filters auf dem Test-File,language=HTML,label={lst:output}]
-<html>
- <head>
-   <style></style>
-     <style></style>
-      </head>
-       <body>
-        <span id="main"><span id="ghead">
-            <div id="gbar"></div>
-            <div id="guser"></div>
-            <div class="gbh" style="left: 0pt;"></div>
-            <div class="gbh" style="right: 0pt;"></div>
-        </span> 
-        <center>
-            <span id="body">
-                <center>
-                    <br id="lgpd" />
-                    <img alt="Google" src="" id="logo" width="276" height="110" />
-                    <br />
-                    <br />
-                    <br />
-                </center>
-            </span> 
-            <span id="footer">
-            <center>
-                <br />
-                <p></p>
-            </center>
-        </span> 
-        <div id="xjsd"></div>
-        <div id="xjsi"></div>
-        </center></span> apsi demo 26. November 2012 
-    </body>
-</html>
-
-\end{lstlisting}
-\end{appendix}
