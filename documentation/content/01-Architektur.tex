@@ -42,11 +42,12 @@ Klasse & Einstiegspunkt in die Applikation. \\
 
 \subsection{Authentifizierungsablauf}
 
-Das Aktivitätsdiagramm Abbildung \ref{fig:process} beschreibt den Verarbeitungsprozess vom Starten der Applikation, bis zur Ausgabe des gesäuberten HTML Codes.
+Das Aktivitätsdiagramm Abbildung \ref{fig:process} beschreibt den Loginprozess bei der HTTP-POST Anfrage auf /register mit einem gültigen Benutzernamen und E-Mail Adresse.
+Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der Token ID setzt.
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=1.0\textwidth]{./content/Filtering_Process_cut.png}
+		\includegraphics[width=1.0\textwidth]{./content/Login_process.png}
 	\end{center}
 	\caption{Verarbeitungsprozess}
 	\label{fig:process}
