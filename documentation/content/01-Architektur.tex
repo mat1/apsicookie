@@ -11,9 +11,9 @@ Dieses Kapitel erläutert den Aufbau unserer Applikation.
 Auf der Abbildung \ref{fig:overview} sind die wichtigsten Klassen und Interfaces der Applikation ersichtlich. In der Tabelle \ref{tab:class} sind
 die wichtigsten Klassen beschrieben.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=1.0\textwidth]{./content/Class_Overview.png}
+		\includegraphics[width=0.9\textwidth]{./content/Class_Overview_2.png}
 	\end{center}
 	\caption{Übersicht über die Klassen und Interfaces}
 	\label{fig:overview}
@@ -30,6 +30,7 @@ XYHandler   & Nehmen HTTP Anfragen auf einer bestimmten URL entgegen und geben e
 UserManager & Verwaltet die Benutzer. Validiert beim Erstellen eines Benutzers den Benutzername und die E-Mail Adresse mit Hilfe der Klasse UserValidator.
               Wirft eine Exception, wenn der Benutzer nicht erstellt werden kann. \\
 SessionManager & Verwaltet die ClientSessions. Ordnet jeder Session ein Token zu, mit welchem die Session identifiziert werden kann. \\
+CookieManager & Verwaltet das Erstellen und Lesen von Cookies, welche eine Session identifizieren können. \\
 \hline \hline
 \end{tabular}
 \caption{Klassen}
@@ -59,7 +60,7 @@ Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der To
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=1.0\textwidth]{./content/Login_process.png}
+		\includegraphics[width=0.8\textwidth]{./content/Login_process.png}
 	\end{center}
 	\caption{Loginprozess}
 	\label{fig:process}
