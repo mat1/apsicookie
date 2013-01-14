@@ -66,6 +66,12 @@ Als Resultat wird eine HTTP-Respone zurückgegeben, welche ein Cookie mit der To
 	\label{fig:process}
 \end{figure}
 
+
+\subsubsection{eMail Verifikation}
+
+Um die eMail Adresse zu verifizieren, wird zuerst die Struktur der Addresse mittels \textit{regex} 
+überprüft, anschliessend wird die Domain auf einen \textit{MX-Record} überprüft.
+
 \subsection{Cookie Authentification}
 
 Die Schwierigkeit liegt darin, ein Cookie so aufzubauen, dass es für einen Angreifer schwierig ist (oder gar unmöglich), den Inhalt zu
@@ -104,9 +110,7 @@ function checkCookie(cookie, requestHeader) {
     if(cookie.expirationTime < current type) return FALSE
 
     k =  HMAC(token | expiration timestamp, sk)
-
-    descypted = decrypt(cookie.data, k)
-
+    decypted = decrypt(cookie.data, k)
     if(decrypt failed) return FALSE
 
     expected = HMAC(token | expiration timestamp | data | SSL Session Key, k)
