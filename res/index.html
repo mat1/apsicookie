@@ -2,18 +2,27 @@
 <html>
 	<head>
 		<title>Apsi</title>
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
 	</head>
 	<body>
-		<h1>Welcome</h1>
-		<form action="/register" method="post">
-		  <fieldset>
-		    <legend>Login</legend>
-		    <label>Username:</label>
-		    <input name="username" type="text" placeholder="Username">
-		    <label>Mail:</label>
-		    <input name="mail" type="text" placeholder="Mail">
-		    <button type="submit">Submit</button>
-		  </fieldset>
-		</form>
+
+    <div class="container">
+	    <div class="row">
+			<h1>Welcome</h1>
+			<form action="/register" method="post">
+			  <fieldset>
+			    <legend>Login</legend>
+			    <label>Username:
+			    	<input name="username" type="text" placeholder="Username">
+			    </label>
+			    <label>Mail:
+			    	<input name="mail" type="text" placeholder="Mail">
+			    </label>
+			    <button type="submit" class="btn">Submit</button>
+			  </fieldset>
+			</form>
+		</div>	
+    </div> 
+
 	</body>
 </html>

@@ -32,6 +32,7 @@ public final class Server {
 			server.createContext("/", WelcomeHandler.create());
 			server.createContext("/register", RegistrationHandler.create(sessionManager, userManager));
 			server.createContext("/secured", SecureContentHandler.create(RequestValidator.create(sessionManager, HeaderInfoHasher.create())));
+			server.createContext("/bootstrap.min.css", CssHandler.create());
 			server.setExecutor(null); // creates a default executor
 			server.start();
 			logger.info("Http server successfully started.");
